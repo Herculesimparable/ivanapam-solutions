@@ -38,9 +38,7 @@
         navList.classList.remove("open");
         navToggle.classList.remove("open");
         navToggle.setAttribute("aria-expanded", "false");
-        document.body.style.overflow = document.body.classList.contains("cart-open")
-          ? "hidden"
-          : "";
+        document.body.style.overflow = "";
       });
     });
   }
@@ -190,6 +188,7 @@
 
   function openLightbox(src, caption, index, mode) {
     if (!lightbox || !lightboxImg || !src) return;
+    if (window.IV_closeBookingDrawer) window.IV_closeBookingDrawer();
     if (mode === "partners") syncPartnerLightboxItems();
     else syncLightboxItems();
     if (typeof index === "number" && index >= 0) {
@@ -210,7 +209,7 @@
     lightbox.hidden = true;
     lightbox.setAttribute("aria-hidden", "true");
     lightboxImg.src = "";
-    document.body.style.overflow = "";
+    document.body.style.overflow = document.body.classList.contains("cart-open") ? "hidden" : "";
   }
 
   function stepLightbox(delta) {

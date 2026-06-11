@@ -33,9 +33,20 @@
 
   function assetUrl(path) {
     if (!path || /^https?:\/\//i.test(path) || path.startsWith("data:")) return path || "";
-    const clean = String(path).replace(/^\//, "");
+
     const base = getBasePath();
-    return base === "/" ? clean : `${base}${clean}`;
+    let p = String(path).replace(/^\//, "");
+
+    if (base === "/") return p;
+
+    const seg = base.replace(/^\//, "").replace(/\/$/, "");
+    while (p.startsWith(`${seg}/${seg}/`)) {
+      p = p.slice(seg.length + 1);
+    }
+    if (!p.startsWith(`${seg}/`) && p !== seg) {
+      p = `${seg}/${p}`;
+    }
+    return `/${p}`;
   }
 
   window.IV_utils = { escapeHtml, normalize, onReady, getBasePath, assetUrl };

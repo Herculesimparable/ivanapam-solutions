@@ -1028,7 +1028,7 @@
 
     const url = window.IV_utils?.assetUrl ? window.IV_utils.assetUrl(path) : path;
 
-    return url.includes("?") ? url : `${url}?v=20260727`;
+    return url.includes("?") ? url : `${url}?v=20260729`;
 
   }
 
@@ -1452,6 +1452,8 @@
   }
 
 
+
+  window.IV_closeBookingDrawer = closeDrawer;
 
   onReady("config-ready", (e) => init(e.detail || window.IV_CONFIG));
 
