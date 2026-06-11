@@ -38,7 +38,9 @@
         navList.classList.remove("open");
         navToggle.classList.remove("open");
         navToggle.setAttribute("aria-expanded", "false");
-        document.body.style.overflow = "";
+        document.body.style.overflow = document.body.classList.contains("cart-open")
+          ? "hidden"
+          : "";
       });
     });
   }

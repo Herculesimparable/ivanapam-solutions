@@ -894,11 +894,27 @@
 
 
 
+  function setScrollLock(locked) {
+
+    document.documentElement.classList.toggle("cart-open", locked);
+
+    document.body.classList.toggle("cart-open", locked);
+
+    document.body.style.overflow = locked ? "hidden" : "";
+
+  }
+
+
+
   function openDrawer() {
 
-    bookingDrawer?.classList.add("open");
+    if (!bookingDrawer) return;
 
-    document.body.classList.add("cart-open");
+    bookingDrawer.classList.add("open");
+
+    bookingDrawer.setAttribute("aria-hidden", "false");
+
+    setScrollLock(true);
 
     if (bookingBackdrop) {
 
@@ -914,9 +930,13 @@
 
   function closeDrawer() {
 
-    bookingDrawer?.classList.remove("open");
+    if (!bookingDrawer) return;
 
-    document.body.classList.remove("cart-open");
+    bookingDrawer.classList.remove("open");
+
+    bookingDrawer.setAttribute("aria-hidden", "true");
+
+    setScrollLock(false);
 
     if (bookingBackdrop) {
 
@@ -925,6 +945,48 @@
       bookingBackdrop.setAttribute("aria-hidden", "true");
 
     }
+
+  }
+
+
+
+  function closeMobileNav() {
+
+    const navList = document.querySelector(".nav__list");
+
+    const navToggle = document.querySelector(".nav__toggle");
+
+    if (!navList?.classList.contains("open")) return;
+
+    navList.classList.remove("open");
+
+    navToggle?.classList.remove("open");
+
+    navToggle?.setAttribute("aria-expanded", "false");
+
+    if (!document.body.classList.contains("cart-open")) {
+
+      document.body.style.overflow = "";
+
+    }
+
+  }
+
+
+
+  function goToBookingMobile() {
+
+    closeMobileNav();
+
+    const section = document.getElementById("agendamentos");
+
+    if (section) {
+
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    }
+
+    window.setTimeout(() => openDrawer(), isMobile() ? 280 : 0);
 
   }
 
@@ -1241,7 +1303,15 @@
 
       const url = `https://wa.me/${WHATSAPP_PRIMARY}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
 
-      window.open(url, "_blank", "noopener,noreferrer");
+      if (isMobile()) {
+
+        window.location.assign(url);
+
+      } else {
+
+        window.open(url, "_blank", "noopener,noreferrer");
+
+      }
 
       showToast(t("forms.bookingOk"));
 
@@ -1259,7 +1329,13 @@
 
 
 
-    bookingToggle?.addEventListener("click", openDrawer);
+    bookingToggle?.addEventListener("click", (e) => {
+
+      e.preventDefault();
+
+      goToBookingMobile();
+
+    });
 
     bookingClose?.addEventListener("click", closeDrawer);
 
@@ -1289,7 +1365,25 @@
 
     document.querySelectorAll("[href='#agendamentos']").forEach((link) => {
 
-      link.addEventListener("click", () => closeDrawer());
+      link.addEventListener("click", (e) => {
+
+        if (link.id === "booking-toggle") return;
+
+        closeMobileNav();
+
+        if (isMobile()) {
+
+          e.preventDefault();
+
+          goToBookingMobile();
+
+          return;
+
+        }
+
+        closeDrawer();
+
+      });
 
     });
 

@@ -100,7 +100,6 @@ button {
 .container {
   width: min(calc(100% - 2 * var(--space-container)), var(--max-width));
   margin-inline: auto;
-  container-type: inline-size;
 }
 
 /* ===== Pattern background ===== */
@@ -1068,7 +1067,6 @@ button {
   gap: 2rem;
   align-items: start;
   position: relative;
-  isolation: isolate;
 }
 
 .booking__toolbar {
@@ -1672,8 +1670,10 @@ body.cart-open .cart-backdrop:not([hidden]) {
   transform: translateY(-2px);
 }
 
+html.cart-open,
 body.cart-open {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 /* ===== Toast ===== */
@@ -3153,6 +3153,8 @@ body.cart-open {
   cursor: pointer;
   transition: transform 0.15s;
   text-align: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-bar__cart:active,
@@ -3253,6 +3255,10 @@ body.cart-open {
     grid-template-columns: 1fr;
   }
 
+  .cart-backdrop {
+    display: block;
+  }
+
   .cart-panel {
     position: fixed;
     top: auto;
@@ -3260,19 +3266,25 @@ body.cart-open {
     left: 0;
     right: 0;
     align-self: auto;
-    max-height: 85dvh;
+    max-height: min(88dvh, 720px);
     border-radius: var(--radius-md) var(--radius-md) 0 0;
-    z-index: 150;
+    z-index: 160;
     transform: translateY(100%);
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .cart-panel.open {
     transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .cart-panel__close {
     display: block;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .about__grid,
