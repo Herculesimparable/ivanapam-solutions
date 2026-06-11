@@ -20,7 +20,7 @@
 
   const FORM_KEY = "ivanapam-booking-form";
 
-  const MOBILE_BREAK = 960;
+  const MOBILE_BREAK = 900;
 
   const t = (key, vars) => (window.IV_t ? window.IV_t(key, vars) : key);
 
@@ -82,15 +82,7 @@
 
   const bookingClose = document.getElementById("booking-close");
 
-  const bookingOpenPanel = document.getElementById("booking-open-panel");
-
-  const bookingOpenCount = document.getElementById("booking-open-count");
-
-  const bookingPanelSlot = document.getElementById("booking-panel-slot");
-
   const toast = document.getElementById("toast");
-
-  let drawerHome = null;
 
   const bookName = document.getElementById("book-name");
 
@@ -163,6 +155,68 @@
   function isMobile() {
 
     return window.matchMedia(`(max-width: ${MOBILE_BREAK}px)`).matches;
+
+  }
+
+
+
+  function isTouchDevice() {
+
+    return isMobile() || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+  }
+
+
+
+  function openExternalUrl(url) {
+
+    if (!url) return;
+
+    if (isTouchDevice()) {
+
+      window.location.assign(url);
+
+      return;
+
+    }
+
+    const popup = window.open(url, "_blank", "noopener,noreferrer");
+
+    if (!popup) window.location.assign(url);
+
+  }
+
+
+
+  function scrollToBookingSection() {
+
+    document.getElementById("agendamentos")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  }
+
+
+
+  function focusFirstInvalidField() {
+
+    const invalid = bookingDrawer?.querySelector(".invalid");
+
+    if (!invalid) return;
+
+    invalid.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    if (typeof invalid.focus === "function") {
+
+      try {
+
+        invalid.focus({ preventScroll: true });
+
+      } catch (_) {
+
+        invalid.focus();
+
+      }
+
+    }
 
   }
 
@@ -392,6 +446,8 @@
 
       if (svc) showToast(t("toast.added", { name: svc.name }));
 
+      if (wasEmpty && isMobile()) openDrawer();
+
     }
 
 
@@ -615,28 +671,6 @@
     if (btnClear) btnClear.hidden = !hasBookingContent();
 
     if (btnWhatsApp) btnWhatsApp.disabled = count === 0;
-
-    updateOpenPanelBtn();
-
-  }
-
-
-
-  function updateOpenPanelBtn() {
-
-    if (!bookingOpenPanel) return;
-
-    const show =
-
-      isMobile() &&
-
-      selected.length > 0 &&
-
-      !bookingDrawer?.classList.contains("open");
-
-    bookingOpenPanel.hidden = !show;
-
-    if (bookingOpenCount) bookingOpenCount.textContent = String(selected.length);
 
   }
 
@@ -922,55 +956,13 @@
 
 
 
-  function setScrollLock(locked) {
-
-    document.documentElement.classList.toggle("cart-open", locked);
-
-    document.body.classList.toggle("cart-open", locked);
-
-    document.body.style.overflow = locked ? "hidden" : "";
-
-  }
-
-
-
-  function syncDrawerMount() {
-
-    if (!bookingDrawer) return;
-
-    if (isMobile()) {
-
-      if (!drawerHome) drawerHome = bookingPanelSlot || bookingDrawer.parentElement;
-
-      if (bookingDrawer.parentElement !== document.body) {
-
-        document.body.appendChild(bookingDrawer);
-
-      }
-
-    } else if (drawerHome && bookingDrawer.parentElement !== drawerHome) {
-
-      drawerHome.appendChild(bookingDrawer);
-
-      closeDrawer();
-
-    }
-
-  }
-
-
-
   function openDrawer() {
 
-    if (!bookingDrawer) return;
+    bookingDrawer?.classList.add("open");
 
-    syncDrawerMount();
+    bookingDrawer?.setAttribute("aria-hidden", "false");
 
-    bookingDrawer.classList.add("open");
-
-    bookingDrawer.setAttribute("aria-hidden", "false");
-
-    setScrollLock(true);
+    document.body.classList.add("cart-open");
 
     if (bookingBackdrop) {
 
@@ -980,21 +972,17 @@
 
     }
 
-    updateOpenPanelBtn();
-
   }
 
 
 
   function closeDrawer() {
 
-    if (!bookingDrawer) return;
+    bookingDrawer?.classList.remove("open");
 
-    bookingDrawer.classList.remove("open");
+    bookingDrawer?.setAttribute("aria-hidden", "true");
 
-    bookingDrawer.setAttribute("aria-hidden", "true");
-
-    setScrollLock(false);
+    document.body.classList.remove("cart-open");
 
     if (bookingBackdrop) {
 
@@ -1003,42 +991,6 @@
       bookingBackdrop.setAttribute("aria-hidden", "true");
 
     }
-
-    updateOpenPanelBtn();
-
-  }
-
-
-
-  function closeMobileNav() {
-
-    const navList = document.querySelector(".nav__list");
-
-    const navToggle = document.querySelector(".nav__toggle");
-
-    if (!navList?.classList.contains("open")) return;
-
-    navList.classList.remove("open");
-
-    navToggle?.classList.remove("open");
-
-    navToggle?.setAttribute("aria-expanded", "false");
-
-    if (!document.body.classList.contains("cart-open")) {
-
-      document.body.style.overflow = "";
-
-    }
-
-  }
-
-
-
-  function scrollToBooking() {
-
-    closeMobileNav();
-
-    document.getElementById("agendamentos")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   }
 
@@ -1349,21 +1301,15 @@
 
         openDrawer();
 
+        focusFirstInvalidField();
+
         return;
 
       }
 
       const url = `https://wa.me/${WHATSAPP_PRIMARY}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
 
-      if (isMobile()) {
-
-        window.location.assign(url);
-
-      } else {
-
-        window.open(url, "_blank", "noopener,noreferrer");
-
-      }
+      openExternalUrl(url);
 
       showToast(t("forms.bookingOk"));
 
@@ -1381,15 +1327,13 @@
 
 
 
-    bookingToggle?.addEventListener("click", (e) => {
+    bookingToggle?.addEventListener("click", () => {
 
-      e.preventDefault();
+      scrollToBookingSection();
 
-      scrollToBooking();
+      openDrawer();
 
     });
-
-    bookingOpenPanel?.addEventListener("click", () => openDrawer());
 
     bookingClose?.addEventListener("click", closeDrawer);
 
@@ -1413,29 +1357,35 @@
 
       field?.addEventListener("change", onFormChange);
 
+      field?.addEventListener("focus", () => {
+
+        if (!isMobile()) return;
+
+        setTimeout(() => {
+
+          field.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        }, 280);
+
+      });
+
     });
 
 
 
     document.querySelectorAll("[href='#agendamentos']").forEach((link) => {
 
-      link.addEventListener("click", (e) => {
-
-        if (link.id === "booking-toggle") return;
-
-        closeMobileNav();
+      link.addEventListener("click", () => {
 
         if (isMobile()) {
 
-          e.preventDefault();
+          setTimeout(() => openDrawer(), 120);
 
-          scrollToBooking();
+        } else {
 
-          return;
+          closeDrawer();
 
         }
-
-        closeDrawer();
 
       });
 
@@ -1489,19 +1439,15 @@
 
     loadForm();
 
-    syncDrawerMount();
-
-    closeDrawer();
-
-    window.addEventListener("resize", () => {
-
-      syncDrawerMount();
-
-      updateOpenPanelBtn();
-
-    });
-
     refreshUI();
+
+
+
+    if (bookingDrawer) {
+
+      bookingDrawer.setAttribute("aria-hidden", isMobile() ? "true" : "false");
+
+    }
 
   }
 
