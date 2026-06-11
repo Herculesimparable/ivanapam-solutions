@@ -49,5 +49,13 @@
     return `/${p}`;
   }
 
-  window.IV_utils = { escapeHtml, normalize, onReady, getBasePath, assetUrl };
+  function bookingPageUrl() {
+    return assetUrl("reservar.html");
+  }
+
+  function isBookingPage() {
+    return /\/reservar\.html$/i.test(location.pathname) || document.body.classList.contains("page-reservar");
+  }
+
+  window.IV_utils = { escapeHtml, normalize, onReady, getBasePath, assetUrl, bookingPageUrl, isBookingPage };
 })();

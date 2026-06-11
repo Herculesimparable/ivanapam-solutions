@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1f9a4a">
+  <meta name="format-detection" content="telephone=yes">
+  <meta name="application-name" content="IVANAPAM Solutions">
+  <meta name="description" content="Reserve o seu serviço de limpeza e desinfestação — IVANAPAM Solutions Angola.">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <script>
+    (function () {
+      var p = location.pathname;
+      if (p.indexOf("/ivanapam-solutions") === 0 && !p.endsWith("/") && p.indexOf(".", p.lastIndexOf("/") + 1) === -1) {
+        location.replace(p + "/" + location.search + location.hash);
+      }
+    })();
+  </script>
+  <title data-i18n="booking.pageTitle">Reservar — IVANAPAM Solutions</title>
+  <link rel="icon" href="favicon.svg?v=20260610" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260802">
+</head>
+<body class="page-reservar">
+  <header class="booking-page-nav">
+    <a href="index.html" data-home-link class="booking-page-nav__back" data-i18n-attr="aria-label" data-i18n="booking.backHome" aria-label="Voltar ao início">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      <span data-i18n="booking.back">Início</span>
+    </a>
+    <a href="index.html" data-home-link class="booking-page-nav__brand">
+      <img src="assets/img/logo.svg" alt="IVANAPAM Solutions" width="40" height="40">
+      <span>IVANAPAM</span>
+    </a>
+    <div class="lang-switch lang-switch--compact" role="group" data-i18n-attr="aria-label" data-i18n="lang.aria" aria-label="Idioma">
+      <button type="button" class="lang-switch__btn" data-lang="pt" aria-pressed="true">PT</button>
+      <button type="button" class="lang-switch__btn" data-lang="en" aria-pressed="false">EN</button>
+      <button type="button" class="lang-switch__btn" data-lang="es" aria-pressed="false">ES</button>
+      <button type="button" class="lang-switch__btn" data-lang="fr" aria-pressed="false">FR</button>
+    </div>
+  </header>
+
+  <main class="booking-page-main">
+    <section class="booking section booking--page" id="agendamentos">
+      <div class="container">
+        <header class="section__header section__header--center">
+          <span class="section__label" data-i18n="booking.label">Agendamentos online</span>
+          <h1 class="section__title" data-i18n="booking.title">Marque o seu serviço</h1>
+          <p class="section__intro" data-i18n="booking.intro">Selecione os serviços, preencha os dados e envie o pedido diretamente no WhatsApp.</p>
+        </header>
+
+        <ol class="booking-steps" id="booking-steps" data-i18n-attr="aria-label" data-i18n="booking.stepsAria" aria-label="Progresso do agendamento">
+          <li class="booking-steps__item is-active" data-step="1">
+            <span class="booking-steps__num">1</span>
+            <span class="booking-steps__label" data-i18n="booking.step1">Serviços</span>
+          </li>
+          <li class="booking-steps__item" data-step="2">
+            <span class="booking-steps__num">2</span>
+            <span class="booking-steps__label" data-i18n="booking.step2">Dados</span>
+          </li>
+          <li class="booking-steps__item" data-step="3">
+            <span class="booking-steps__num">3</span>
+            <span class="booking-steps__label" data-i18n="booking.step3">Confirmar</span>
+          </li>
+        </ol>
+
+        <div class="booking__layout booking__layout--page">
+          <div class="booking__services">
+            <div class="booking__toolbar">
+              <label class="search-box">
+                <span class="visually-hidden" data-i18n="booking.search">Pesquisar serviços</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="search" id="service-search" data-i18n-attr="placeholder" data-i18n="booking.searchPlaceholder" placeholder="Pesquisar limpeza, desinfestação...">
+              </label>
+            </div>
+            <nav class="menu-tabs" id="service-tabs" data-i18n-attr="aria-label" data-i18n="booking.tabsAria" aria-label="Categorias de serviços"></nav>
+            <p class="menu-empty" id="service-empty" hidden data-i18n="booking.empty">Nenhum serviço encontrado.</p>
+            <div class="menu-grid" id="service-grid"></div>
+          </div>
+
+          <aside class="cart-panel cart-panel--page open" id="booking-drawer" data-i18n-attr="aria-label" data-i18n="booking.panelAria" aria-label="O seu agendamento" aria-hidden="false">
+            <div class="cart-panel__header">
+              <h2><span data-i18n="booking.panelTitle">O seu agendamento</span> <span class="cart-count" id="booking-count" hidden>0</span></h2>
+            </div>
+
+            <div class="cart-panel__body">
+              <p class="cart-empty" id="booking-empty" data-i18n="booking.panelEmpty">Selecione um ou mais serviços para agendar.</p>
+              <ul class="cart-items" id="booking-items"></ul>
+
+              <div class="cart-panel__form">
+                <label class="form-row" for="book-name">
+                  <span data-i18n="booking.name">Nome completo</span>
+                  <input type="text" id="book-name" data-i18n-attr="placeholder" data-i18n="booking.namePh" placeholder="O seu nome" autocomplete="name" required>
+                </label>
+                <label class="form-row" for="book-phone">
+                  <span data-i18n="booking.phone">Telefone / WhatsApp</span>
+                  <input type="tel" id="book-phone" data-i18n-attr="placeholder" data-i18n="booking.phonePh" placeholder="9XX XXX XXX" autocomplete="tel" inputmode="tel" required>
+                  <span class="form-hint" id="book-phone-hint" hidden data-i18n="booking.phoneHint">9 dígitos a começar por 9 (ex.: 925 484 438). +244 é opcional.</span>
+                </label>
+                <label class="form-row" for="book-property">
+                  <span data-i18n="booking.property">Tipo de local</span>
+                  <select id="book-property" required>
+                    <option value="" data-i18n="booking.propertyPh">Selecione...</option>
+                    <option value="residential" data-i18n="booking.propertyRes">Residência</option>
+                    <option value="commercial" data-i18n="booking.propertyCom">Empresa / Escritório</option>
+                    <option value="industrial" data-i18n="booking.propertyInd">Industrial / Armazém</option>
+                    <option value="other" data-i18n="booking.propertyOther">Outro</option>
+                  </select>
+                </label>
+                <label class="form-row" for="book-address">
+                  <span data-i18n="booking.address">Morada / Local do serviço</span>
+                  <input type="text" id="book-address" data-i18n-attr="placeholder" data-i18n="booking.addressPh" placeholder="Bairro, rua, referência..." required>
+                </label>
+                <div class="form__row form__row--2">
+                  <label class="form-row" for="book-date">
+                    <span data-i18n="booking.date">Data preferida</span>
+                    <input type="date" id="book-date" required>
+                  </label>
+                  <label class="form-row" for="book-time">
+                    <span data-i18n="booking.time">Hora preferida</span>
+                    <input type="time" id="book-time" value="09:00">
+                  </label>
+                </div>
+                <label class="form-row" for="book-note">
+                  <span data-i18n="booking.note">Observações (opcional)</span>
+                  <textarea id="book-note" rows="2" data-i18n-attr="placeholder" data-i18n="booking.notePh" placeholder="Detalhes adicionais sobre o serviço..."></textarea>
+                </label>
+                <p class="booking-confirm-hint" id="booking-hint" data-i18n="booking.confirmHint">Reveja os dados e envie — a nossa equipa confirma no WhatsApp.</p>
+              </div>
+            </div>
+
+            <div class="cart-panel__actions cart-panel__actions--sticky">
+              <a class="btn btn--booking-wa btn--full is-disabled" id="btn-whatsapp-booking" role="button" aria-disabled="true">
+                <span class="btn__icon-ring" aria-hidden="true">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </span>
+                <span class="btn__copy">
+                  <strong data-i18n="booking.whatsapp">Enviar agendamento no WhatsApp</strong>
+                  <small data-i18n="booking.whatsappSub">Grátis · Confirmação rápida pela equipa</small>
+                </span>
+              </a>
+              <button type="button" class="btn btn--booking-clear btn--full" id="btn-clear-booking" hidden>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/><path d="M10 11v6M14 11v6"/></svg>
+                <span data-i18n="booking.clear">Limpar tudo</span>
+              </button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/core/utils.js?v=20260802"></script>
+  <script src="js/config.js?v=20260802"></script>
+  <script src="js/i18n.js?v=20260802"></script>
+  <script src="js/booking.js?v=20260802"></script>
+</body>
+</html>

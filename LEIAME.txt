@@ -5,6 +5,7 @@ ONDE ACEDER (qualquer rede / dispositivo)
 -----------------------------------------
 1. GITHUB PAGES (internet — principal):
    https://herculesimparable.github.io/ivanapam-solutions/
+   Reservar (móvel): https://herculesimparable.github.io/ivanapam-solutions/reservar.html
 
 2. VERCEL (alternativa):
    deploy-vercel.bat  ou  npm run deploy

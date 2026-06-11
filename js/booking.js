@@ -20,7 +20,11 @@
 
   const FORM_KEY = "ivanapam-booking-form";
 
-  const MOBILE_BREAK = 900;
+  const MOBILE_BREAK = 960;
+
+  const IS_BOOKING_PAGE = window.IV_utils?.isBookingPage
+    ? window.IV_utils.isBookingPage()
+    : document.body.classList.contains("page-reservar");
 
   const t = (key, vars) => (window.IV_t ? window.IV_t(key, vars) : key);
 
@@ -174,7 +178,7 @@
 
     if (isTouchDevice()) {
 
-      window.location.assign(url);
+      window.location.href = url;
 
       return;
 
@@ -182,7 +186,167 @@
 
     const popup = window.open(url, "_blank", "noopener,noreferrer");
 
-    if (!popup) window.location.assign(url);
+    if (!popup) window.location.href = url;
+
+  }
+
+
+
+  function getWhatsAppBookingUrl() {
+
+    if (!WHATSAPP_PRIMARY || selected.length === 0) return "";
+
+    return `https://wa.me/${WHATSAPP_PRIMARY}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
+
+  }
+
+
+
+  function isFormComplete() {
+
+    if (selected.length === 0) return false;
+
+    if (!bookName?.value.trim()) return false;
+
+    if (!bookProperty?.value) return false;
+
+    if (!bookAddress?.value.trim()) return false;
+
+    if (!bookDate?.value || !isDateNotPast(bookDate.value)) return false;
+
+    const phoneVal = bookPhone?.value.trim() || "";
+
+    if (!phoneVal || !isValidAngolaPhone(phoneVal)) return false;
+
+    return true;
+
+  }
+
+
+
+  function openWhatsAppBooking() {
+
+    saveForm();
+
+    if (!validateBookingForm()) return false;
+
+    const url = getWhatsAppBookingUrl();
+
+    if (!url) return false;
+
+    openExternalUrl(url);
+
+    return true;
+
+  }
+
+
+
+  function bookingPageUrl() {
+
+    return window.IV_utils?.bookingPageUrl ? window.IV_utils.bookingPageUrl() : "reservar.html";
+
+  }
+
+
+
+  function goToBookingPage() {
+
+    window.location.href = bookingPageUrl();
+
+  }
+
+
+
+  function applyBookingLinks() {
+
+    const url = bookingPageUrl();
+
+    const home = window.IV_utils?.assetUrl ? window.IV_utils.assetUrl("index.html") : "index.html";
+
+    document.querySelectorAll("[data-booking-link]").forEach((el) => {
+
+      el.setAttribute("href", url);
+
+    });
+
+    document.querySelectorAll("[data-home-link]").forEach((el) => {
+
+      el.setAttribute("href", home);
+
+    });
+
+  }
+
+
+
+  function handleBookingCta() {
+
+    if (!IS_BOOKING_PAGE && isMobile()) {
+
+      goToBookingPage();
+
+      return;
+
+    }
+
+    saveForm();
+
+    scrollToBookingSection();
+
+    if (isFormComplete()) {
+
+      openWhatsAppBooking();
+
+      return;
+
+    }
+
+    if (selected.length > 0) {
+
+      openDrawer();
+
+      if (!validateBookingForm()) {
+
+        focusFirstInvalidField();
+
+        showToast(t("booking.formError"));
+
+      }
+
+      return;
+
+    }
+
+    showToast(t("booking.selectFirst"));
+
+  }
+
+
+
+  let cartHighlightTimer;
+
+
+
+  function bindWhatsAppLinks() {
+
+    document.querySelectorAll("[data-dynamic-wa]").forEach((el) => {
+
+      el.addEventListener("click", (e) => {
+
+        if (!isTouchDevice()) return;
+
+        const href = el.getAttribute("href");
+
+        if (!href || href === "#") return;
+
+        e.preventDefault();
+
+        window.location.href = href;
+
+      });
+
+    });
 
   }
 
@@ -446,7 +610,11 @@
 
       if (svc) showToast(t("toast.added", { name: svc.name }));
 
-      if (wasEmpty && isMobile()) openDrawer();
+      if (wasEmpty && IS_BOOKING_PAGE) {
+
+        setTimeout(() => openDrawer(), 120);
+
+      }
 
     }
 
@@ -670,7 +838,19 @@
 
     if (btnClear) btnClear.hidden = !hasBookingContent();
 
-    if (btnWhatsApp) btnWhatsApp.disabled = count === 0;
+    if (btnWhatsApp) {
+
+      const ready = count > 0 && !!WHATSAPP_PRIMARY;
+
+      btnWhatsApp.setAttribute("aria-disabled", ready ? "false" : "true");
+
+      btnWhatsApp.classList.toggle("is-disabled", !ready);
+
+      if (ready) btnWhatsApp.href = getWhatsAppBookingUrl();
+
+      else btnWhatsApp.removeAttribute("href");
+
+    }
 
   }
 
@@ -958,9 +1138,35 @@
 
   function openDrawer() {
 
-    bookingDrawer?.classList.add("open");
+    if (!bookingDrawer) return;
 
-    bookingDrawer?.setAttribute("aria-hidden", "false");
+    if (IS_BOOKING_PAGE) {
+
+      bookingDrawer.classList.add("open");
+
+      bookingDrawer.setAttribute("aria-hidden", "false");
+
+      requestAnimationFrame(() => {
+
+        bookingDrawer.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      });
+
+      return;
+
+    }
+
+    bookingDrawer.classList.add("open");
+
+    bookingDrawer.setAttribute("aria-hidden", "false");
+
+    if (isMobile()) {
+
+      goToBookingPage();
+
+      return;
+
+    }
 
     document.body.classList.add("cart-open");
 
@@ -978,9 +1184,31 @@
 
   function closeDrawer() {
 
-    bookingDrawer?.classList.remove("open");
+    if (!bookingDrawer || IS_BOOKING_PAGE) return;
 
-    bookingDrawer?.setAttribute("aria-hidden", "true");
+    bookingDrawer.classList.remove("open", "is-highlight");
+
+    clearTimeout(cartHighlightTimer);
+
+    if (isMobile()) {
+
+      bookingDrawer.setAttribute("aria-hidden", "false");
+
+      document.body.classList.remove("cart-open");
+
+      if (bookingBackdrop) {
+
+        bookingBackdrop.hidden = true;
+
+        bookingBackdrop.setAttribute("aria-hidden", "true");
+
+      }
+
+      return;
+
+    }
+
+    bookingDrawer.setAttribute("aria-hidden", "true");
 
     document.body.classList.remove("cart-open");
 
@@ -1293,9 +1521,21 @@
 
   function bindEvents() {
 
-    btnWhatsApp?.addEventListener("click", () => {
+    btnWhatsApp?.addEventListener("click", (e) => {
+
+      if (btnWhatsApp.getAttribute("aria-disabled") === "true") {
+
+        e.preventDefault();
+
+        handleBookingCta();
+
+        return;
+
+      }
 
       if (!validateBookingForm()) {
+
+        e.preventDefault();
 
         showToast(t("booking.formError"));
 
@@ -1307,11 +1547,17 @@
 
       }
 
-      const url = `https://wa.me/${WHATSAPP_PRIMARY}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
+      btnWhatsApp.href = getWhatsAppBookingUrl();
 
-      openExternalUrl(url);
+      if (!isTouchDevice()) {
 
-      showToast(t("forms.bookingOk"));
+        e.preventDefault();
+
+        openExternalUrl(btnWhatsApp.href);
+
+        showToast(t("forms.bookingOk"));
+
+      }
 
     });
 
@@ -1327,13 +1573,17 @@
 
 
 
-    bookingToggle?.addEventListener("click", () => {
+    if (bookingToggle?.tagName === "BUTTON") {
 
-      scrollToBookingSection();
+      bookingToggle.addEventListener("click", (e) => {
 
-      openDrawer();
+        e.preventDefault();
 
-    });
+        handleBookingCta();
+
+      });
+
+    }
 
     bookingClose?.addEventListener("click", closeDrawer);
 
@@ -1375,21 +1625,27 @@
 
     document.querySelectorAll("[href='#agendamentos']").forEach((link) => {
 
-      link.addEventListener("click", () => {
+      link.addEventListener("click", (e) => {
 
-        if (isMobile()) {
-
-          setTimeout(() => openDrawer(), 120);
-
-        } else {
+        if (!isMobile() || IS_BOOKING_PAGE) {
 
           closeDrawer();
 
+          return;
+
         }
+
+        e.preventDefault();
+
+        goToBookingPage();
 
       });
 
     });
+
+
+
+    bindWhatsAppLinks();
 
 
 
@@ -1443,9 +1699,21 @@
 
 
 
+    applyBookingLinks();
+
     if (bookingDrawer) {
 
-      bookingDrawer.setAttribute("aria-hidden", isMobile() ? "true" : "false");
+      bookingDrawer.setAttribute("aria-hidden", "false");
+
+      if (IS_BOOKING_PAGE) {
+
+        bookingDrawer.classList.add("open");
+
+      } else {
+
+        bookingDrawer.classList.toggle("open", !isMobile());
+
+      }
 
     }
 
@@ -1454,6 +1722,10 @@
 
 
   window.IV_closeBookingDrawer = closeDrawer;
+
+  window.IV_handleBookingCta = handleBookingCta;
+
+  window.IV_openWhatsAppBooking = openWhatsAppBooking;
 
   onReady("config-ready", (e) => init(e.detail || window.IV_CONFIG));
 
