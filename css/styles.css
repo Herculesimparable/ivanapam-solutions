@@ -3572,6 +3572,12 @@ body.cart-open {
   min-height: 100dvh;
   padding-top: calc(var(--nav-height, 64px) + env(safe-area-inset-top, 0px));
   padding-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  overflow-anchor: none;
+}
+
+.page-reservar .booking__services,
+.page-reservar .menu-grid {
+  overflow-anchor: none;
 }
 
 .booking-page-nav {
@@ -3733,6 +3739,30 @@ body.cart-open {
   padding: 0.55rem 0.85rem;
   cursor: pointer;
   touch-action: manipulation;
+}
+
+@media (max-width: 767px) {
+  .page-reservar:not(.page-reservar--form-open) .cart-panel--page {
+    display: none;
+  }
+
+  .page-reservar:not(.page-reservar--form-open) .booking-page-main {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .page-reservar .menu-card__toggle {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .page-reservar .menu-card__toggle:focus {
+    outline: none;
+  }
+
+  .page-reservar .menu-card__toggle:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+  }
 }
 
 @media (min-width: 768px) {
