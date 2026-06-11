@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 240" fill="none" role="img" aria-label="Chimbungos Grill">
+  <rect width="560" height="240" rx="20" fill="#fffaf6"/>
+  <circle cx="88" cy="120" r="48" fill="#c0392b"/>
+  <path d="M62 132c8-18 24-28 26-28s18 10 26 28" stroke="#f4d03f" stroke-width="4" stroke-linecap="round"/>
+  <text x="88" y="128" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="30" font-weight="800" fill="#fff">C</text>
+  <text x="310" y="104" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="38" font-weight="800" fill="#8b1e14">Chimbungos</text>
+  <text x="310" y="138" text-anchor="middle" font-family="Open Sans, Arial, sans-serif" font-size="18" font-weight="600" fill="#5c3d36">Grill · Restaurante</text>
+  <text x="310" y="166" text-anchor="middle" font-family="Open Sans, Arial, sans-serif" font-size="14" fill="#7a5a52">Kilamba, Belas · Luanda</text>
+</svg>

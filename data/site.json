@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "site": {
+    "name": "IVANAPAM Solutions",
+    "domain": "www.ivanapam.com",
+    "email": "ivanapamsolutions@gmail.com",
+    "whatsappPrimary": "244925484438",
+    "instagram": "https://www.instagram.com/ivanapam_solutions",
+    "instagramHandle": "@ivanapam_solutions"
+  },
+  "phones": [
+    {
+      "raw": "244925484438",
+      "display": "+244 925 484 438",
+      "primary": true
+    },
+    {
+      "raw": "244943242781",
+      "display": "+244 943 242 781"
+    },
+    {
+      "raw": "244926646668",
+      "display": "+244 926 646 668"
+    },
+    {
+      "raw": "244935447285",
+      "display": "+244 935 447 285"
+    }
+  ],
+  "images": {
+    "logo": "assets/img/logo.svg",
+    "hero": "assets/img/hero.webp",
+    "heroJpg": "assets/img/hero.jpg",
+    "hero4k": "assets/img/hero-4k.webp",
+    "hero4kJpg": "assets/img/hero-4k.jpg",
+    "about": "assets/img/about.webp",
+    "aboutJpg": "assets/img/about.jpg"
+  },
+  "languages": [
+    "pt",
+    "en",
+    "es",
+    "fr"
+  ],
+  "serviceCategories": [
+    {
+      "id": "all",
+      "labelKey": "all"
+    },
+    {
+      "id": "limpeza",
+      "labelKey": "limpeza"
+    },
+    {
+      "id": "desinfestacao",
+      "labelKey": "desinfestacao"
+    },
+    {
+      "id": "sanitizacao",
+      "labelKey": "sanitizacao"
+    }
+  ],
+  "services": [
+    {
+      "id": "limpeza-residencial",
+      "itemKey": "residential",
+      "category": "limpeza",
+      "icon": "🏠"
+    },
+    {
+      "id": "limpeza-escritorios",
+      "itemKey": "office",
+      "category": "limpeza",
+      "icon": "🏢"
+    },
+    {
+      "id": "limpeza-profunda",
+      "itemKey": "deep",
+      "category": "limpeza",
+      "icon": "✨"
+    },
+    {
+      "id": "limpeza-externa",
+      "itemKey": "outdoor",
+      "category": "limpeza",
+      "icon": "🌿"
+    },
+    {
+      "id": "desinfestacao",
+      "itemKey": "disinfestation",
+      "category": "desinfestacao",
+      "icon": "🐛",
+      "badgeKey": "popular"
+    },
+    {
+      "id": "desratizacao",
+      "itemKey": "deratization",
+      "category": "desinfestacao",
+      "icon": "🐀"
+    },
+    {
+      "id": "controle-mosquitos",
+      "itemKey": "mosquito",
+      "category": "desinfestacao",
+      "icon": "🦟"
+    },
+    {
+      "id": "sanitizacao",
+      "itemKey": "sanitization",
+      "category": "sanitizacao",
+      "icon": "🛡️",
+      "badgeKey": "recommended"
+    }
+  ],
+  "partners": [
+    {
+      "id": "gelsadas",
+      "key": "gelsadas",
+      "logo": "assets/img/partners/gelsadas.webp",
+      "logoJpg": "assets/img/partners/gelsadas-hd.jpg",
+      "logoSvg": "assets/img/partners/gelsadas.webp"
+    },
+    {
+      "id": "global",
+      "key": "global",
+      "logo": "assets/img/partners/global.webp",
+      "logoJpg": "assets/img/partners/global-hd.jpg",
+      "logoSvg": "assets/img/partners/global.webp"
+    },
+    {
+      "id": "chimbungos",
+      "key": "chimbungos",
+      "logo": "assets/img/partners/chimbungos.webp",
+      "logoJpg": "assets/img/partners/chimbungos-hd.jpg",
+      "logoSvg": "assets/img/partners/chimbungos.webp"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "desinfestacao-residencial",
+      "captionKey": "desinfestacaoResidencial"
+    },
+    {
+      "id": "fumigacao-termica",
+      "captionKey": "fumigacaoTermica"
+    },
+    {
+      "id": "limpeza-escritorios",
+      "captionKey": "limpezaEscritorios"
+    },
+    {
+      "id": "escadas-equipa",
+      "captionKey": "escadasEquipa"
+    },
+    {
+      "id": "limpeza-patio",
+      "captionKey": "limpezaPatio"
+    },
+    {
+      "id": "aniversario",
+      "captionKey": "aniversario"
+    }
+  ]
+}

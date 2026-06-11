@@ -1,0 +1,34 @@
+IVANAPAM SOLUTIONS — Website
+============================
+
+ONDE ACEDER (qualquer rede / dispositivo)
+-----------------------------------------
+1. GITHUB PAGES (internet — principal):
+   https://herculesimparable.github.io/ivanapam-solutions/
+
+2. VERCEL (alternativa):
+   deploy-vercel.bat  ou  npm run deploy
+
+3. REDE LOCAL (Wi-Fi — telemóvel, tablet, outro PC):
+   iniciar.bat
+   Use o IP mostrado na consola, ex.: http://192.168.x.x:8080/?fresh=1
+   Se não abrir noutro dispositivo: liberar-firewall.bat (como administrador)
+
+4. TÚNEL RÁPIDO (internet sem deploy):
+   iniciar.bat + tunnel-externo.bat → copie o link .loca.lt
+
+5. ESTE PC:
+   http://localhost:8080/?fresh=1
+
+REGENERAR CONTEÚDO
+------------------
+regenerar_fotos.bat   — galeria e hero
+regenerar_logos.bat   — logos Gelsadas, Global, Chimbungos
+
+WHATSAPP
+--------
++244 925 484 438
+
+INSTAGRAM
+---------
+@ivanapam_solutions
