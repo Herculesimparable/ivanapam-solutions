@@ -117,21 +117,21 @@
       "id": "gelsadas",
       "key": "gelsadas",
       "logo": "assets/img/partners/gelsadas.webp",
-      "logoJpg": "assets/img/partners/gelsadas-hd.jpg",
+      "logoJpg": "assets/img/partners-4k/gelsadas.jpg",
       "logoSvg": "assets/img/partners/gelsadas.webp"
     },
     {
       "id": "global",
       "key": "global",
       "logo": "assets/img/partners/global.webp",
-      "logoJpg": "assets/img/partners/global-hd.jpg",
+      "logoJpg": "assets/img/partners-4k/global.jpg",
       "logoSvg": "assets/img/partners/global.webp"
     },
     {
       "id": "chimbungos",
       "key": "chimbungos",
       "logo": "assets/img/partners/chimbungos.webp",
-      "logoJpg": "assets/img/partners/chimbungos-hd.jpg",
+      "logoJpg": "assets/img/partners-4k/chimbungos.jpg",
       "logoSvg": "assets/img/partners/chimbungos.webp"
     }
   ],

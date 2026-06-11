@@ -960,7 +960,9 @@
 
     if (!path) return "";
 
-    return path.includes("?") ? path : `${path}?v=20260726`;
+    const url = window.IV_utils?.assetUrl ? window.IV_utils.assetUrl(path) : path;
+
+    return url.includes("?") ? url : `${url}?v=20260727`;
 
   }
 

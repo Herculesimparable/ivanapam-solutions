@@ -7,23 +7,25 @@
 
   const SITE_URL = "data/site.json";
   const MANIFEST_URL = "assets/img/manifest.json";
+  const assetUrl = (path) => (window.IV_utils?.assetUrl ? window.IV_utils.assetUrl(path) : path);
 
   function resolveGallery(siteGallery, manifest) {
     const files = new Map((manifest || []).map((m) => [m.id, m]));
     return (siteGallery || []).map((item) => {
       const asset = files.get(item.id) || {};
       const base = `assets/img/gallery/${item.id}`;
+      const rel = (p) => (p ? assetUrl(p) : p);
       return {
         id: item.id,
         key: item.captionKey,
         captionKey: item.captionKey,
-        src: asset.full || asset.fullJpg || `${base}.webp`,
-        srcJpg: asset.fullJpg || `${base}.jpg`,
-        fullHd: asset.fullHd || asset.fullHdJpg,
-        full4k: asset.full4k,
-        full4kJpg: asset.full4kJpg,
-        fullHdJpg: asset.fullHdJpg,
-        thumb: asset.thumb || asset.thumbJpg || `assets/img/thumbs/${item.id}.webp`,
+        src: rel(asset.full || asset.fullJpg || `${base}.webp`),
+        srcJpg: rel(asset.fullJpg || `${base}.jpg`),
+        fullHd: rel(asset.fullHd || asset.fullHdJpg),
+        full4k: rel(asset.full4k),
+        full4kJpg: rel(asset.full4kJpg),
+        fullHdJpg: rel(asset.fullHdJpg),
+        thumb: rel(asset.thumb || asset.thumbJpg || `assets/img/thumbs/${item.id}.webp`),
         width: asset.width || 3840,
         height: asset.height || 2160,
       };
@@ -68,8 +70,8 @@
   async function loadConfig() {
     const bust = Date.now();
     const [siteRes, manifestRes] = await Promise.all([
-      fetch(`${SITE_URL}?v=${bust}`, { cache: "no-cache" }),
-      fetch(`${MANIFEST_URL}?v=${bust}`, { cache: "no-cache" }).catch(() => null),
+      fetch(`${assetUrl(SITE_URL)}?v=${bust}`, { cache: "no-cache" }),
+      fetch(`${assetUrl(MANIFEST_URL)}?v=${bust}`, { cache: "no-cache" }).catch(() => null),
     ]);
 
     if (!siteRes.ok) throw new Error(`Failed to load ${SITE_URL}`);

@@ -87,7 +87,7 @@ def sync_site() -> None:
     for p in site["partners"]:
         if p["id"] == "global":
             p["logo"] = "assets/img/partners/global.webp"
-            p["logoJpg"] = "assets/img/partners/global-hd.jpg"
+            p["logoJpg"] = "assets/img/partners-4k/global.jpg"
             p["logoSvg"] = "assets/img/partners/global.webp"
     SITE_JSON.write_text(json.dumps(site, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 

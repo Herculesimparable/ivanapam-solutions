@@ -25,5 +25,18 @@
     window.addEventListener(event, fn, { once: true });
   }
 
-  window.IV_utils = { escapeHtml, normalize, onReady };
+  /** Prefixo para GitHub Pages (/ivanapam-solutions/) e localhost (/). */
+  function getBasePath() {
+    const match = location.pathname.match(/^(.*\/ivanapam-solutions)\/?/);
+    return match ? `${match[1]}/` : "/";
+  }
+
+  function assetUrl(path) {
+    if (!path || /^https?:\/\//i.test(path) || path.startsWith("data:")) return path || "";
+    const clean = String(path).replace(/^\//, "");
+    const base = getBasePath();
+    return base === "/" ? clean : `${base}${clean}`;
+  }
+
+  window.IV_utils = { escapeHtml, normalize, onReady, getBasePath, assetUrl };
 })();
