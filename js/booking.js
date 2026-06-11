@@ -20,7 +20,7 @@
 
   const FORM_KEY = "ivanapam-booking-form";
 
-  const MOBILE_BREAK = 900;
+  const MOBILE_BREAK = 960;
 
   const t = (key, vars) => (window.IV_t ? window.IV_t(key, vars) : key);
 
@@ -82,7 +82,15 @@
 
   const bookingClose = document.getElementById("booking-close");
 
+  const bookingOpenPanel = document.getElementById("booking-open-panel");
+
+  const bookingOpenCount = document.getElementById("booking-open-count");
+
+  const bookingPanelSlot = document.getElementById("booking-panel-slot");
+
   const toast = document.getElementById("toast");
+
+  let drawerHome = null;
 
   const bookName = document.getElementById("book-name");
 
@@ -384,8 +392,6 @@
 
       if (svc) showToast(t("toast.added", { name: svc.name }));
 
-      if (wasEmpty && isMobile()) openDrawer();
-
     }
 
 
@@ -609,6 +615,28 @@
     if (btnClear) btnClear.hidden = !hasBookingContent();
 
     if (btnWhatsApp) btnWhatsApp.disabled = count === 0;
+
+    updateOpenPanelBtn();
+
+  }
+
+
+
+  function updateOpenPanelBtn() {
+
+    if (!bookingOpenPanel) return;
+
+    const show =
+
+      isMobile() &&
+
+      selected.length > 0 &&
+
+      !bookingDrawer?.classList.contains("open");
+
+    bookingOpenPanel.hidden = !show;
+
+    if (bookingOpenCount) bookingOpenCount.textContent = String(selected.length);
 
   }
 
@@ -906,9 +934,37 @@
 
 
 
+  function syncDrawerMount() {
+
+    if (!bookingDrawer) return;
+
+    if (isMobile()) {
+
+      if (!drawerHome) drawerHome = bookingPanelSlot || bookingDrawer.parentElement;
+
+      if (bookingDrawer.parentElement !== document.body) {
+
+        document.body.appendChild(bookingDrawer);
+
+      }
+
+    } else if (drawerHome && bookingDrawer.parentElement !== drawerHome) {
+
+      drawerHome.appendChild(bookingDrawer);
+
+      closeDrawer();
+
+    }
+
+  }
+
+
+
   function openDrawer() {
 
     if (!bookingDrawer) return;
+
+    syncDrawerMount();
 
     bookingDrawer.classList.add("open");
 
@@ -923,6 +979,8 @@
       bookingBackdrop.setAttribute("aria-hidden", "false");
 
     }
+
+    updateOpenPanelBtn();
 
   }
 
@@ -945,6 +1003,8 @@
       bookingBackdrop.setAttribute("aria-hidden", "true");
 
     }
+
+    updateOpenPanelBtn();
 
   }
 
@@ -974,19 +1034,11 @@
 
 
 
-  function goToBookingMobile() {
+  function scrollToBooking() {
 
     closeMobileNav();
 
-    const section = document.getElementById("agendamentos");
-
-    if (section) {
-
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    }
-
-    window.setTimeout(() => openDrawer(), isMobile() ? 280 : 0);
+    document.getElementById("agendamentos")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   }
 
@@ -1333,9 +1385,11 @@
 
       e.preventDefault();
 
-      goToBookingMobile();
+      scrollToBooking();
 
     });
+
+    bookingOpenPanel?.addEventListener("click", () => openDrawer());
 
     bookingClose?.addEventListener("click", closeDrawer);
 
@@ -1375,7 +1429,7 @@
 
           e.preventDefault();
 
-          goToBookingMobile();
+          scrollToBooking();
 
           return;
 
@@ -1434,6 +1488,18 @@
     loadBooking();
 
     loadForm();
+
+    syncDrawerMount();
+
+    closeDrawer();
+
+    window.addEventListener("resize", () => {
+
+      syncDrawerMount();
+
+      updateOpenPanelBtn();
+
+    });
 
     refreshUI();
 

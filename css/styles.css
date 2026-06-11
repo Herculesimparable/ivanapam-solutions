@@ -1073,6 +1073,40 @@ button {
   margin-bottom: 1.5rem;
 }
 
+.booking__panel-slot {
+  min-width: 0;
+}
+
+.booking__open-panel {
+  display: none;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.95rem 1.15rem;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.booking__open-panel-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.85rem;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.22);
+}
+
 .search-box {
   display: flex;
   align-items: center;
@@ -1166,6 +1200,8 @@ button {
   box-shadow: var(--shadow-sm);
   border: 1px solid rgba(31, 154, 74, 0.1);
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
@@ -1271,6 +1307,7 @@ button {
   align-items: center;
   justify-content: center;
   width: 100%;
+  min-height: 44px;
   font-family: var(--font-display);
   font-size: 0.88rem;
   font-weight: 700;
@@ -1280,6 +1317,8 @@ button {
   background: var(--primary);
   color: var(--white);
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition:
     background var(--transition),
     color var(--transition),
@@ -1311,11 +1350,17 @@ button {
   background: rgba(10, 31, 18, 0.55);
   z-index: 140;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.3s ease;
+}
+
+.cart-backdrop[hidden] {
+  display: none !important;
 }
 
 body.cart-open .cart-backdrop:not([hidden]) {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .cart-panel {
@@ -3238,6 +3283,15 @@ body.cart-open {
   .cart-backdrop {
     display: none;
   }
+
+  .booking__services {
+    grid-column: 1;
+  }
+
+  .booking__panel-slot {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }
 
 @media (min-width: 1100px) {
@@ -3253,6 +3307,20 @@ body.cart-open {
 @media (max-width: 960px) {
   .booking__layout {
     grid-template-columns: 1fr;
+  }
+
+  .booking__panel-slot {
+    display: none;
+  }
+
+  .booking__open-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .booking__open-panel[hidden] {
+    display: none !important;
   }
 
   .cart-backdrop {
