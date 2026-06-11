@@ -86,11 +86,6 @@
 
   const bookingClose = document.getElementById("booking-close");
 
-  const bookingFloatBar = document.getElementById("booking-float-bar");
-
-  const bookingFloatCount = document.getElementById("booking-float-count");
-
-  const bookingFloatGo = document.getElementById("booking-float-go");
 
   const toast = document.getElementById("toast");
 
@@ -358,50 +353,6 @@
 
 
 
-  function isCompactBookingMode() {
-
-    return IS_BOOKING_PAGE && isMobile() && !document.body.classList.contains("page-reservar--form-open");
-
-  }
-
-
-
-  function lockViewportOnAnchor(anchorEl, fn) {
-
-    const x = window.scrollX;
-
-    const y = window.scrollY;
-
-    const top = anchorEl && anchorEl.isConnected ? anchorEl.getBoundingClientRect().top : null;
-
-    fn();
-
-    const fix = () => {
-
-      if (anchorEl && anchorEl.isConnected && top !== null) {
-
-        const delta = anchorEl.getBoundingClientRect().top - top;
-
-        window.scrollTo(x, y + delta);
-
-        return;
-
-      }
-
-      window.scrollTo(x, y);
-
-    };
-
-    fix();
-
-    requestAnimationFrame(fix);
-
-    requestAnimationFrame(() => requestAnimationFrame(fix));
-
-  }
-
-
-
   function updateServiceCardState(id) {
 
     if (!serviceGrid) return false;
@@ -448,13 +399,7 @@
 
   function bindCartItemRemove(btn) {
 
-    btn.addEventListener("click", (e) => {
-
-      e.preventDefault();
-
-      toggleService(btn.dataset.id, btn);
-
-    });
+    btn.addEventListener("click", () => toggleService(btn.dataset.id));
 
   }
 
@@ -503,18 +448,6 @@
     }
 
     existing?.remove();
-
-  }
-
-
-
-  function openBookingFormPanel() {
-
-    document.body.classList.add("page-reservar--form-open");
-
-    renderBooking();
-
-    openDrawer({ scroll: true });
 
   }
 
@@ -756,7 +689,7 @@
 
 
 
-  function toggleService(id, anchorEl) {
+  function toggleService(id) {
 
     const idx = selected.indexOf(id);
 
@@ -784,37 +717,15 @@
 
     saveBooking();
 
-    lockViewportOnAnchor(anchorEl, () => {
+    if (!updateServiceCardState(id)) renderServices();
 
-      if (!updateServiceCardState(id)) renderServices();
+    if (IS_BOOKING_PAGE) syncBookingItem(id, adding);
 
-      if (isCompactBookingMode()) {
+    else renderBooking();
 
-        updateCounts();
+    updateCounts();
 
-        updateSteps();
-
-      } else if (IS_BOOKING_PAGE) {
-
-        syncBookingItem(id, adding);
-
-        updateCounts();
-
-        updateSteps();
-
-      } else {
-
-        renderBooking();
-
-        updateCounts();
-
-        updateSteps();
-
-      }
-
-    });
-
-    if (anchorEl && typeof anchorEl.blur === "function") anchorEl.blur();
+    updateSteps();
 
   }
 
@@ -1038,14 +949,6 @@
 
     }
 
-    if (bookingFloatBar && bookingFloatCount) {
-
-      bookingFloatCount.textContent = String(count);
-
-      bookingFloatBar.hidden = !IS_BOOKING_PAGE || count === 0;
-
-    }
-
   }
 
 
@@ -1156,19 +1059,15 @@
 
       if (btn) {
 
-        e.preventDefault();
-
         e.stopPropagation();
 
-        toggleService(id, btn);
+        toggleService(id);
 
         return;
 
       }
 
-      const fallback = card.querySelector(".menu-card__toggle");
-
-      toggleService(id, fallback || card);
+      toggleService(id);
 
     });
 
@@ -1179,16 +1078,6 @@
   function renderBooking() {
 
     if (!bookingItems || !bookingEmpty) return;
-
-    if (isCompactBookingMode()) {
-
-      bookingEmpty.hidden = selected.length > 0;
-
-      updateCounts();
-
-      return;
-
-    }
 
     bookingEmpty.hidden = selected.length > 0;
 
@@ -1359,16 +1248,6 @@
       bookingDrawer.classList.add("open");
 
       bookingDrawer.setAttribute("aria-hidden", "false");
-
-      if (scrollToPanel) {
-
-        requestAnimationFrame(() => {
-
-          bookingDrawer.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        });
-
-      }
 
       return;
 
@@ -1745,7 +1624,7 @@
 
         e.preventDefault();
 
-        handleBookingCta();
+        showToast(t("booking.selectFirst"));
 
         return;
 
@@ -1757,25 +1636,31 @@
 
         showToast(t("booking.formError"));
 
-        openDrawer({ scroll: IS_BOOKING_PAGE });
-
         focusFirstInvalidField();
 
         return;
 
       }
 
-      btnWhatsApp.href = getWhatsAppBookingUrl();
+      const url = getWhatsAppBookingUrl();
 
-      if (!isTouchDevice()) {
+      btnWhatsApp.href = url;
+
+      if (isTouchDevice()) {
 
         e.preventDefault();
 
-        openExternalUrl(btnWhatsApp.href);
+        window.location.href = url;
 
-        showToast(t("forms.bookingOk"));
+        return;
 
       }
+
+      e.preventDefault();
+
+      openExternalUrl(url);
+
+      showToast(t("forms.bookingOk"));
 
     });
 
@@ -1803,16 +1688,6 @@
 
     }
 
-    bookingFloatGo?.addEventListener("click", (e) => {
-
-      e.preventDefault();
-
-      openBookingFormPanel();
-
-      focusFirstInvalidField();
-
-    });
-
     bookingClose?.addEventListener("click", closeDrawer);
 
     bookingBackdrop?.addEventListener("click", closeDrawer);
@@ -1837,7 +1712,7 @@
 
       field?.addEventListener("focus", () => {
 
-        if (!isMobile()) return;
+        if (!isMobile() || IS_BOOKING_PAGE) return;
 
         setTimeout(() => {
 

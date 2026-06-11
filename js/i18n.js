@@ -136,6 +136,7 @@
         backHome: "Voltar ao início",
         floatSelected: "serviço(s) selecionado(s)",
         floatGo: "Preencher dados",
+        scrollToForm: "↓ Deslize para preencher os seus dados e confirmar no WhatsApp",
       },
       partners: {
         label: "Confiança",
@@ -519,6 +520,7 @@
         backHome: "Back to home",
         floatSelected: "service(s) selected",
         floatGo: "Fill in details",
+        scrollToForm: "↓ Scroll down to fill in your details and confirm on WhatsApp",
       },
       partners: {
         label: "Trust",
@@ -903,6 +905,7 @@
         backHome: "Volver al inicio",
         floatSelected: "servicio(s) seleccionado(s)",
         floatGo: "Rellenar datos",
+        scrollToForm: "↓ Baja para rellenar tus datos y confirmar en WhatsApp",
       },
       partners: {
         label: "Confianza",
@@ -1287,6 +1290,7 @@
         backHome: "Retour à l'accueil",
         floatSelected: "service(s) sélectionné(s)",
         floatGo: "Remplir les données",
+        scrollToForm: "↓ Faites défiler pour remplir vos données et confirmer sur WhatsApp",
       },
       partners: {
         label: "Confiance",
