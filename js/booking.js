@@ -86,6 +86,12 @@
 
   const bookingClose = document.getElementById("booking-close");
 
+  const bookingFloatBar = document.getElementById("booking-float-bar");
+
+  const bookingFloatCount = document.getElementById("booking-float-count");
+
+  const bookingFloatGo = document.getElementById("booking-float-go");
+
   const toast = document.getElementById("toast");
 
   const bookName = document.getElementById("book-name");
@@ -352,6 +358,22 @@
 
 
 
+  function withPreservedScroll(fn) {
+
+    const y = window.scrollY;
+
+    fn();
+
+    requestAnimationFrame(() => {
+
+      window.scrollTo(0, y);
+
+    });
+
+  }
+
+
+
   function scrollToBookingSection() {
 
     document.getElementById("agendamentos")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -610,25 +632,23 @@
 
       if (svc) showToast(t("toast.added", { name: svc.name }));
 
-      if (wasEmpty && IS_BOOKING_PAGE) {
-
-        setTimeout(() => openDrawer(), 120);
-
-      }
-
     }
 
 
 
     saveBooking();
 
-    renderBooking();
+    withPreservedScroll(() => {
 
-    renderServices();
+      renderBooking();
 
-    updateCounts();
+      renderServices();
 
-    updateSteps();
+      updateCounts();
+
+      updateSteps();
+
+    });
 
   }
 
@@ -849,6 +869,14 @@
       if (ready) btnWhatsApp.href = getWhatsAppBookingUrl();
 
       else btnWhatsApp.removeAttribute("href");
+
+    }
+
+    if (bookingFloatBar && bookingFloatCount) {
+
+      bookingFloatCount.textContent = String(count);
+
+      bookingFloatBar.hidden = !IS_BOOKING_PAGE || count === 0;
 
     }
 
@@ -1136,7 +1164,9 @@
 
 
 
-  function openDrawer() {
+  function openDrawer(opts) {
+
+    const scrollToPanel = opts && opts.scroll === true;
 
     if (!bookingDrawer) return;
 
@@ -1146,11 +1176,15 @@
 
       bookingDrawer.setAttribute("aria-hidden", "false");
 
-      requestAnimationFrame(() => {
+      if (scrollToPanel) {
 
-        bookingDrawer.scrollIntoView({ behavior: "smooth", block: "start" });
+        requestAnimationFrame(() => {
 
-      });
+          bookingDrawer.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        });
+
+      }
 
       return;
 
@@ -1539,7 +1573,7 @@
 
         showToast(t("booking.formError"));
 
-        openDrawer();
+        openDrawer({ scroll: IS_BOOKING_PAGE });
 
         focusFirstInvalidField();
 
@@ -1584,6 +1618,14 @@
       });
 
     }
+
+    bookingFloatGo?.addEventListener("click", () => {
+
+      openDrawer({ scroll: true });
+
+      focusFirstInvalidField();
+
+    });
 
     bookingClose?.addEventListener("click", closeDrawer);
 

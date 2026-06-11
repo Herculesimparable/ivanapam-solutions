@@ -134,6 +134,8 @@
         pageTitle: "Reservar — IVANAPAM Solutions",
         back: "Início",
         backHome: "Voltar ao início",
+        floatSelected: "serviço(s) selecionado(s)",
+        floatGo: "Preencher dados",
       },
       partners: {
         label: "Confiança",
@@ -515,6 +517,8 @@
         pageTitle: "Book — IVANAPAM Solutions",
         back: "Home",
         backHome: "Back to home",
+        floatSelected: "service(s) selected",
+        floatGo: "Fill in details",
       },
       partners: {
         label: "Trust",
@@ -897,6 +901,8 @@
         pageTitle: "Reservar — IVANAPAM Solutions",
         back: "Inicio",
         backHome: "Volver al inicio",
+        floatSelected: "servicio(s) seleccionado(s)",
+        floatGo: "Rellenar datos",
       },
       partners: {
         label: "Confianza",
@@ -1279,6 +1285,8 @@
         pageTitle: "Réserver — IVANAPAM Solutions",
         back: "Accueil",
         backHome: "Retour à l'accueil",
+        floatSelected: "service(s) sélectionné(s)",
+        floatGo: "Remplir les données",
       },
       partners: {
         label: "Confiance",
